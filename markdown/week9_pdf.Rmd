@@ -1,0 +1,61 @@
+---
+title: "week9_pdf"
+author: "Mathi Manavalan"
+date: "3/21/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Studio API
+
+## Libraries
+```{r libraries, message=FALSE}
+library(tidyverse)
+library(lubridate)
+library(ggplot2)
+
+```
+
+## Data Import
+```{r data import, message=FALSE, warning=FALSE}
+week9_tbl <- as.tibble(read_csv(file = "../data/week3.csv")) %>% 
+  mutate(timeStart = ymd_hms(timeStart), timeEnd = ymd_hms(timeEnd)) %>%  
+  mutate(condition = factor(condition, levels = c("A", "B", "C"), 
+                            labels = c("Block A", "Block B", "Control")), 
+         gender = factor(gender, levels = c("M", "F"), labels = c("Male", "Female"))) %>% 
+  mutate(avg15 = (q1 + q2 + q3 + q4 + q5)/5, avg610 = (q6 + q7 + q8 + q9 + q10)/5)
+```
+
+Cleaning steps done
+
+* imported data as a tibble
+* formatted date and time into appropriate variable types
+* formatted condition and gender into appropriately labeled factors
+* created two new columns of data
+  + column of average of scores on questions Q1-Q5
+  + column of average of score on questions Q6-Q10
+
+## Visualization
+
+```{r visualization, echo=FALSE, message=FALSE, include=TRUE}
+
+ggplot(week9_tbl, aes(x=avg15, y= avg610)) + 
+  geom_jitter() +
+  labs(x = "Mean scores of Q1 - Q5", y = "Mean scores of Q6 - Q10") +
+  geom_smooth(method = "lm", se = FALSE)
+
+
+```
+
+The above plot displays a scatterplot of the average scores of participants in questions Q1 through Q5 and the average scores of same participants in questions Q6 through Q10.
+
+## Analysis
+
+```{r analysis}
+analysis <- summary(lm(week9_tbl$avg610 ~ week9_tbl$avg15))
+analysis
+```
+The correlation was `r analysis$r.squared` (p<.05), which is not statistically significant.
