@@ -1,5 +1,7 @@
 
 library(shiny)
+library(dplyr)
+library(ggplot2)
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
@@ -12,7 +14,8 @@ ui <- fluidPage(
         sidebarPanel(
             selectInput("gender", "Gender", choices = c("Male", "Female", "All"),
                         selected = "All"), 
-            checkboxInput("date", "Display only participants who completed the assessment                         before August 1, 2017")
+            checkboxInput("date", "Display only participants who completed the assessment 
+                          before August 1, 2017")
         ),
 
         # Show a plot of the generated distribution
@@ -30,7 +33,7 @@ server <- function(input, output) {
         
         tbl <- readRDS("for_shiny.rds")
         
-        output$dataset <- renderTable(tbl)
+        
 
         if (input$gender != "All") {
             tbl <- subset(tbl, gender == input$gender)
@@ -44,6 +47,10 @@ server <- function(input, output) {
             geom_jitter() +
             labs(x = "Mean scores of Q1 - Q5", y = "Mean scores of Q6 - Q10") +
             geom_smooth(method = "lm", se = FALSE)
+    })
+    
+    output$dataset <- renderTable({
+        tbl <- readRDS("for_shiny.rds")
     })
 }
 
