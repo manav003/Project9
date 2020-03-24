@@ -47,3 +47,4 @@ ggplot(week9_tbl, aes(x=avg15, y= avg610)) +
 summary(lm(week9_tbl$avg610 ~ week9_tbl$avg15))
 
 ```
+https://manav003.shinyapps.io/shiny/
