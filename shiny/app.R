@@ -1,7 +1,5 @@
 
-library(shiny)
-library(dplyr)
-library(ggplot2)
+
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
@@ -28,6 +26,10 @@ ui <- fluidPage(
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
+    
+    library(shiny)
+    library(tidyverse)
+    library(ggplot2)
 
     output$plot <- renderPlot({
         
